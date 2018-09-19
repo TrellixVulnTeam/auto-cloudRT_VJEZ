@@ -6,18 +6,6 @@ from conf import conf
 
 """ [注意]time.sleepを必ず入れること．"""
 class AutoSimulation():
-    """
-    CloudRTに自動登録．
-    以下パラメータ．
-    --------------------
-    chromedriver_path: string
-        ChromeDriver.exeが置いてあるディレクトリパス
-    config_dir: string
-        MATLABで作成したCloudRTの設定ファイルが置いてあるディレクトリパス
-    retry: int
-        Submitに失敗したときリトライする回数
-    --------------------
-    """
     def __init__(self, retry=3):
         self.website = 'http://www.raytracer.cloud/cloudrt/lar/login'
         self.chromedriver_path = conf.chromedriver_path
