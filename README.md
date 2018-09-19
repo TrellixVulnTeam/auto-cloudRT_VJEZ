@@ -1,7 +1,8 @@
 # Auto CloudRT
 CloudRTを自動で処理します．
 ## 仕様
-confディレクトリ直下にconf.pyファイルを作成し，そこに以下のパラメータを記述すること．
+confディレクトリを作成し，その直下にconf.pyファイルを作成する．
+conf.pyに以下のパラメータを記述すること．
 
 ```python:conf.py
 '''
