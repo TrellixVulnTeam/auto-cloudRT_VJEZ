@@ -1,7 +1,8 @@
 # Auto CloudRT
 CloudRTを自動で処理します．
-## 仕様
+## 準備
 confディレクトリを作成し，その直下にconf.pyファイルを作成する．
+
 conf.pyに以下のパラメータを記述すること．
 
 ```python:conf.py
@@ -32,6 +33,7 @@ download_dir = r'<YOUR DOWNLOAD DIR>'
 
 ```
 
+## 説明
 ### auto_simulation
     CloudRTに自動登録．
     以下引数．
