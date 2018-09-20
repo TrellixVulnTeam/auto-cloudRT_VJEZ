@@ -60,7 +60,7 @@ class AutoSimulation():
                     # 正常動作時
                     print('登録完了({}/{})'.format(i+1, len(self.config_files)))
                     break
-                elif res != '' and i < self.retry-1:
+                elif res != '' and r < self.retry-1:
                     # Submitでエラー発生時
                     print(res)
                     print('リトライします．')
