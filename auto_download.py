@@ -42,10 +42,11 @@ class AutoDownload():
         return self.simulation_proliles
 
     def download(self, uuids):
-        for uuid in uuids:
+        for i, uuid in enumerate(uuids):
             download_website = self.download_website + uuid + '/result.tar'
             time.sleep(3)
             self.driver.get(download_website)
+            print('ダウンロード開始({}/{})'.format(i+1, len(uuids)))
 
     def open_tar(self):
         """ 未実装．手動で展開してください． """
@@ -78,5 +79,5 @@ class AutoDownload():
             pass
 
 if __name__ == "__main__":
-    adl = AutoDownload(rename=False)
+    adl = AutoDownload(rename=True)
     adl.run()
