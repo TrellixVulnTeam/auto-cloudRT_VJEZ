@@ -56,7 +56,7 @@ class AutoDownload():
                 break
             else:
                 q2 = input('処理を終了しますか？[y/n]: ')
-                if q2 == 'y' or q1 == 'yes':
+                if q2 == 'y' or q2 == 'yes':
                     sys.exit()
                 else:
                     pass
