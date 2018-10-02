@@ -15,9 +15,9 @@ login_id: string
 login_pass: string
     CloudRTのPassword
 chromedriver_path: string
-    ChromeDriver.exeが置いてあるファイルパス
+    ChromeDriver.exeのパス
 config_dir: string
-    MATLABで作成したCloudRTの設定ファイルが置いてあるディレクトリのパス
+    MATLABで作成したCloudRTのconfigureファイルが置かれているディレクトリのパス
 download_dir: string
     ダウンロードファイルが置かれるディレクトリのパス
 
