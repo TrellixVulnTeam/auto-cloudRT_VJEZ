@@ -84,7 +84,7 @@ class AutoSimulation():
                     if progress != '100%':
                         print('progress...', progress)
                         # 任意の秒数でブラウザを更新
-                        time.sleep(3600)
+                        time.sleep(1200)
                         self.driver.refresh()
                     else:
                         print('progress...', progress)
