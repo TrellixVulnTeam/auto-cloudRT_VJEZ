@@ -1,5 +1,6 @@
 # Auto CloudRT
 CloudRTを自動で処理します．
+
 ## 準備
 confディレクトリを作成し，その直下にconf.pyファイルを作成する．
 
@@ -36,17 +37,25 @@ download_dir = r'<YOUR DOWNLOAD DIR>'
 ## 説明
 ### auto_simulation
     CloudRTに自動登録．
+    ひとつのファイルを登録後，シミュレーションが終わるまで待機し，終わり次第次のファイルを自動で登録する．
+    ※configureファイルは必ず'configure_'から始まる名前にすること．
+    　Work nameはconfigureファイル名から'configure_'が引かれた名前で設定される．
+
     以下引数．
     --------------------
     retry: int
         Submitに失敗したときリトライする回数(Default: 3)
+
 ### auto_download
     CloudRTから自動ダウンロード．
-    以下引数．
-    --------------------
-    rename: bool
-        .tarファイル展開後のディレクトリをリネームするかどうか(Default: True)
-        (TrueならばWork nameにリネーム)
+    config_dirで指定したディレクトリ内に入っている.jsonファイルの数だけCloudRTから順番にダンロードする．
+    展開後のディレクトリ構成：
+        <download_dir>/<work_name>/result/
+    ※ダウンロードディレクトリの中身を空にしてから実行すること．
+    
+### auto_delete
+    CloudRTのSimulation workを自動削除．
+    標準入力から削除する範囲を指定する．
 
 ## 使用ツール
 - [CloudRT](http://www.raytracer.cloud/)
