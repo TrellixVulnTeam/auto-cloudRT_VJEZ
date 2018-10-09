@@ -1,12 +1,13 @@
 import os
 import sys
 import time
+import tarfile
 from selenium import webdriver
 from conf import conf
 
 """ [注意]time.sleepを必ず入れること．"""
 class AutoDownload():
-    def __init__(self, rename=True):
+    def __init__(self):
         self.login_website = 'http://www.raytracer.cloud/cloudrt/lar/login'
         self.download_website = 'http://www.raytracer.cloud/cloudrt/download/'
         self.chromedriver_path = conf.chromedriver_path
@@ -14,8 +15,7 @@ class AutoDownload():
         self.login_pass = conf.login_pass
         self.config_files = [path for path in os.listdir(conf.config_dir) if path.endswith('.json')]
         self.download_dir = conf.download_dir
-        self.simulation_proliles = []
-        self.rename = rename
+        self.simulation_profiles = []
 
     def open_chrome(self):
         chrome_options = webdriver.ChromeOptions()
@@ -33,50 +33,55 @@ class AutoDownload():
         time.sleep(1)
 
     def get_simulation_profiles(self):
-        """ シミュレーションのWork nameとUUIDをセットで返します． """
         for i in range(1, len(self.config_files) + 1):
             work_name = self.driver.find_element_by_xpath('//div[{}]/div[2]/center'.format(i)).text
             uuid = self.driver.find_element_by_xpath('//div[{}]/div[3]/div[2]/div/small'.format(i)).text
             simulation_prolile = {'work_name' : work_name, 'uuid' : uuid.replace('UUID : ', '')}
-            self.simulation_proliles.append(simulation_prolile)
-        return self.simulation_proliles
+            self.simulation_profiles.append(simulation_prolile)
 
-    def download(self, uuids):
+    def download(self):
+        uuids = [simulation_profile.get('uuid') for simulation_profile in self.simulation_profiles]
         for i, uuid in enumerate(uuids):
             download_website = self.download_website + uuid + '/result.tar'
             time.sleep(3)
             self.driver.get(download_website)
             print('ダウンロード開始({}/{})'.format(i+1, len(uuids)))
-
-    def open_tar(self):
-        """ 未実装．手動で展開してください． """
+        # ダウンロードの完了を捕捉
         while True:
-            q1 = input('展開しましたか？[y/n]: ')
-            if q1 == 'y' or q1 == 'yes':
+            is_tarfiles = [download_file.endswith('.tar') for download_file in os.listdir(self.download_dir)]
+            exists_false = [is_tarfile for is_tarfile in is_tarfiles if is_tarfile == False]
+            if len(exists_false) == 0:
                 break
             else:
-                q2 = input('処理を終了しますか？[y/n]: ')
-                if q2 == 'y' or q2 == 'yes':
-                    sys.exit()
-                else:
-                    pass
+                time.sleep(3)
+        print('ダウンロード完了')
 
-    def re_name(self, simulation_profiles):
-        os.chdir(self.download_dir + r'\lustre\jobs')
-        for simulation_profile in simulation_profiles:
-            os.rename(simulation_profile['uuid'], simulation_profile['work_name'])
+    def open_tar(self):
+        os.chdir(self.download_dir)
+        for i, simulation_profile in enumerate(self.simulation_profiles):
+            work_name = simulation_profile['work_name']
+            os.mkdir(work_name)
+            time.sleep(0.5)
+            if i == 0:
+                result_file = 'result.tar'
+            else:
+                result_file = 'result ({}).tar'.format(i)
+            with tarfile.open(result_file, 'r') as tar:
+                tar.extractall('{}/'.format(work_name))
+            print('展開中... {} => {}/'.format(result_file, work_name))
+        print('展開完了')
 
     def run(self):
-        self.open_chrome()
-        self.login()
-        simulation_profiles = self.get_simulation_profiles()
-        uuids = [d.get('uuid') for d in simulation_profiles]
-        self.download(uuids)
-        if self.rename == True:
-            self.open_tar()
-            self.re_name(simulation_profiles)
+        if len(os.listdir(self.download_dir)) != 0:
+            print('ダウンロードディレクトリの中身を空にしてください．')
+            sys.exit()
         else:
             pass
+        self.open_chrome()
+        self.login()
+        self.get_simulation_profiles()
+        self.download()
+        self.open_tar()
 
 if __name__ == "__main__":
     adl = AutoDownload()
