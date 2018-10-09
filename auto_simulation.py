@@ -1,7 +1,9 @@
 import os
 import sys
 import time
+from datetime import datetime
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from conf import conf
 
 """ [注意]time.sleepを必ず入れること．"""
@@ -53,12 +55,14 @@ class AutoSimulation():
             # New workに移動
             time.sleep(1)
             self.driver.find_element_by_link_text('New work').click()
+            # Submit
             for r in range(self.retry):
                 res = self.submit(work_name, os.path.join(self.config_dir, config_file))
                 print(work_name, os.path.join(self.config_dir, config_file))
                 if res == '':
                     # 正常動作時
                     print('登録完了({}/{})'.format(i+1, len(self.config_files)))
+                    print('Current time:', datetime.now())
                     break
                 elif res != '' and r < self.retry-1:
                     # Submitでエラー発生時
@@ -71,9 +75,30 @@ class AutoSimulation():
                     print(res)
                     print('処理を終了します．')
                     sys.exit(1)
-            # 2018/08/18リリースのCloudRTでは1つのシミュレーションが終わるまで
-            # 新たに登録することができなくなったので，終わるまでの時間を入力する
+            # RTが終了するまで待機
             time.sleep(5)
+            self.driver.refresh()
+            while True:
+                try:
+                    progress = self.driver.find_element_by_xpath('//div[1]/div[4]/div[1]/div/div/div/div').text
+                    if progress != '100%':
+                        print('progress...', progress)
+                        # 任意の秒数でブラウザを更新
+                        time.sleep(1200)
+                        self.driver.refresh()
+                    else:
+                        print('progress...', progress)
+                        print('-'*50)
+                        break
+                # 自動ログアウトされた場合ログインしなおす
+                except NoSuchElementException:
+                    try:
+                        self.login()
+                        print('Current time:', datetime.now())
+                        print('----- Re-login -----')
+                    except:
+                        print('予期しないエラーが発生しました．')
+                        sys.exit(1)
 
 if __name__ == "__main__":
     asim = AutoSimulation()

@@ -21,7 +21,7 @@ class AutoDownload():
         chrome_options = webdriver.ChromeOptions()
         prefs = {"download.default_directory" : self.download_dir}
         chrome_options.add_experimental_option("prefs", prefs)
-        self.driver = webdriver.Chrome(executable_path=self.chromedriver_path, chrome_options = chrome_options)
+        self.driver = webdriver.Chrome(executable_path=self.chromedriver_path, chrome_options=chrome_options)
         self.driver.get(self.login_website)
 
     def login(self):
@@ -79,5 +79,5 @@ class AutoDownload():
             pass
 
 if __name__ == "__main__":
-    adl = AutoDownload(rename=True)
+    adl = AutoDownload()
     adl.run()
