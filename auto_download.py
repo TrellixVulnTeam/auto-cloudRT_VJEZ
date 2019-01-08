@@ -8,8 +8,8 @@ from conf import conf
 """ [注意]time.sleepを必ず入れること．"""
 class AutoDownload():
     def __init__(self):
-        self.login_website = 'http://www.raytracer.cloud/cloudrt/lar/login'
-        self.download_website = 'http://www.raytracer.cloud/cloudrt/download/'
+        self.login_website = 'http://cn.raytracer.cloud:9090/cloudrt/lar/login'
+        self.download_website = 'http://cn.raytracer.cloud:9090/cloudrt/download/'
         self.chromedriver_path = conf.chromedriver_path
         self.login_id = conf.login_id
         self.login_pass = conf.login_pass
