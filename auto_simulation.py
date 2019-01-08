@@ -3,13 +3,13 @@ import sys
 import time
 from datetime import datetime
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from conf import conf
 
 """ [注意]time.sleepを必ず入れること．"""
 class AutoSimulation():
     def __init__(self, retry=3):
-        self.website = 'http://www.raytracer.cloud/cloudrt/lar/login'
+        self.website = 'http://cn.raytracer.cloud:9090/cloudrt/lar/login'
         self.chromedriver_path = conf.chromedriver_path
         self.login_id = conf.login_id
         self.login_pass = conf.login_pass
@@ -69,7 +69,6 @@ class AutoSimulation():
                     print(res)
                     print('リトライします．')
                     self.driver.refresh()
-                    self.driver.switch_to_alert().accept()
                 else:
                     # リトライを繰り返しても登録できない場合
                     print(res)
@@ -85,7 +84,10 @@ class AutoSimulation():
                         print('progress...', progress)
                         # 任意の秒数でブラウザを更新
                         time.sleep(1200)
-                        self.driver.refresh()
+                        try:
+                            self.driver.refresh()
+                        except TimeoutException:
+                            time.sleep(1200)
                     else:
                         print('progress...', progress)
                         print('-'*50)

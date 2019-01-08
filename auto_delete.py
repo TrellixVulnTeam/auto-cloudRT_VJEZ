@@ -7,7 +7,7 @@ from conf import conf
 """ [注意]time.sleepを必ず入れること．"""
 class AutoDelete():
     def __init__(self):
-        self.website = 'http://www.raytracer.cloud/cloudrt/lar/login'
+        self.website = 'http://cn.raytracer.cloud:9090/cloudrt/lar/login'
         self.chromedriver_path = conf.chromedriver_path
         self.login_id = conf.login_id
         self.login_pass = conf.login_pass
